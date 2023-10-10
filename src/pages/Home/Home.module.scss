@@ -1,0 +1,50 @@
+@use '../../sass/variables' as v;
+
+.header {
+    padding: 20px;
+    background-color: v.$color-primary;
+        position: relative;
+
+    .header__container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .logo__container {
+
+            display: flex;
+            gap: 10px;
+            align-items: center;
+
+            img {
+                width: 50px;
+                border-radius: 12px;
+            }
+
+            span {
+                color: #fff;
+                font: {
+                    size: 24px;
+                    weight: bold;
+                };
+            }
+
+        }
+
+        .account__container {
+
+            button {
+
+                img {
+                    cursor: pointer;
+                    position: absolute;
+                    top: 25px;
+                    right: 25px;
+                    width: 40px;
+                }
+
+            }
+
+        }
+    }
+}
