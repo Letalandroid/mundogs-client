@@ -1,50 +1,133 @@
 @use '../../sass/variables' as v;
 
 .header {
-    padding: 20px;
-    background-color: v.$color-primary;
-        position: relative;
+	padding: 20px;
+	background-color: v.$color-primary;
+	position: relative;
 
-    .header__container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+	.header__container {
+		display: flex;
+		justify-content: center;
+		align-items: center;
 
-        .logo__container {
+		.logo__container {
+			display: flex;
+			gap: 10px;
+			align-items: center;
 
-            display: flex;
-            gap: 10px;
-            align-items: center;
+			img {
+				width: 50px;
+				border-radius: 12px;
+			}
 
-            img {
-                width: 50px;
-                border-radius: 12px;
-            }
+			span {
+				color: #fff;
+				font: {
+					size: 24px;
+					weight: bold;
+				}
+			}
+		}
 
-            span {
-                color: #fff;
-                font: {
-                    size: 24px;
-                    weight: bold;
-                };
-            }
+		.account__container {
+			button {
+				img {
+					cursor: pointer;
+					position: absolute;
+					top: 25px;
+					right: 25px;
+					width: 40px;
+				}
+			}
+		}
+	}
+}
 
-        }
+.main {
+	.message {
+		font: {
+			size: 18px;
+			weight: bold;
+		}
 
-        .account__container {
+		text-align: center;
+		margin: 50px 0;
+	}
 
-            button {
+	div {
+		display: flex;
 
-                img {
-                    cursor: pointer;
-                    position: absolute;
-                    top: 25px;
-                    right: 25px;
-                    width: 40px;
+		.busqueda {
+			display: flex;
+			gap: 30px;
+			flex-direction: column;
+			width: 35vw;
+			height: max-content;
+			padding: 0 20px;
+
+			.input__buscar {
+				padding: 10px;
+				border: 1px solid #000;
+				border-radius: 4px;
+				font-size: 14px;
+			}
+
+			.busqueda__id {
+				display: flex;
+				align-items: center;
+				gap: 8px;
+
+				span {
+					font: {
+						size: 14px;
+						weight: bold;
+					}
+				}
+
+				input[type='number'] {
+					width: 80px;
+					border-bottom: 1px solid #000;
+				}
+			}
+
+            .rango__container {
+                display: flex;
+                justify-content: space-between;
+                align-items: end;
+
+                p {
+                    font-size: 15px;
                 }
 
+                .precios__container {
+
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+
+                    input {
+                        width: 80px;
+                    }
+                }
             }
 
-        }
-    }
+            .stock__container {
+                display: flex;
+                gap: 8px;
+
+                span {
+					font: {
+						size: 14px;
+						weight: bold;
+					}
+				}
+            }
+		}
+
+		.productos__container {
+			width: 65vw;
+			height: 80px;
+			background-color: #d9d9d9;
+		}
+	}
 }
