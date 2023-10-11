@@ -2,10 +2,11 @@ import styles from './Home.module.scss';
 import logo from '../../assets/logo.jpg';
 import user from '../../assets/user_icon.jpg';
 import { useState } from 'react';
+import ProductoCard from '../../components/ProductoCard/ProductoCard';
 
 const Home = () => {
-	const [minValue, setMinValue] = useState('');
-	const [maxValue, setMaxValue] = useState('');
+	const [minValue, setMinValue] = useState(0);
+	const [maxValue, setMaxValue] = useState(0);
 
 	return (
 		<>
@@ -43,7 +44,7 @@ const Home = () => {
 								<span>S/. {minValue}</span>
 								<input
 									type="range"
-									onChange={(e) => setMinValue(e.target.value)}
+									onChange={(e) => setMinValue(parseInt(e.target.value))}
 								/>
 							</p>
 							<p>Rango de Precios</p>
@@ -51,7 +52,7 @@ const Home = () => {
 								<span>S/. {maxValue}</span>
 								<input
 									type="range"
-									onChange={(e) => setMaxValue(e.target.value)}
+									onChange={(e) => setMaxValue(parseInt(e.target.value))}
 								/>
 							</p>
 						</div>
@@ -60,7 +61,14 @@ const Home = () => {
 							<span>Stock disponible</span>
 						</div>
 					</div>
-					<div className={styles.productos__container}></div>
+					<div className={styles.productos__container}>
+						<ProductoCard
+							url_img={logo}
+                            name='Laptop'
+							descripcion="Lorem ipsum dolor sit amet, consectetur adipiscing elit ..."
+                            price={150.55}
+						/>
+					</div>
 				</div>
 			</main>
 		</>
