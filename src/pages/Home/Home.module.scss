@@ -106,7 +106,7 @@
                     align-items: center;
 
                     input {
-                        width: 80px;
+                        width: 8vw;
                     }
                 }
             }
@@ -122,6 +122,23 @@
 					}
 				}
             }
+
+			button {
+				cursor: pointer;
+				background-color: v.$color-primary;
+				padding: 15px 0;
+				border-radius: 10px;
+				color: #fff;
+				transition: background-color .5s;
+				font: {
+					size: 16px;
+					weight: bold;
+				}
+
+				&:hover {
+					background-color: v.$color-hover;
+				}
+			}
 		}
 
 		.productos__container {
