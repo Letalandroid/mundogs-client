@@ -123,7 +123,7 @@
 				}
             }
 
-			button {
+			.btn__buscar {
 				cursor: pointer;
 				background-color: v.$color-primary;
 				padding: 15px 0;
@@ -137,6 +137,23 @@
 
 				&:hover {
 					background-color: v.$color-hover;
+				}
+			}
+
+			.btn__comprar {
+				cursor: pointer;
+				background-color: #0f0;
+				padding: 15px 0;
+				border-radius: 10px;
+				color: #fff;
+				transition: background-color .5s;
+				font: {
+					size: 16px;
+					weight: bold;
+				}
+
+				&:hover {
+					background-color: #00d000;
 				}
 			}
 		}

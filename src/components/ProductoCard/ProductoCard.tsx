@@ -1,16 +1,53 @@
+import { SetStateAction, useState } from 'react';
 import styles from './ProductoCard.module.scss';
-
-interface Produto {
-    url_img: string;
-    name: string;
-    descripcion: string;
-    price: number;
+interface Producto {
+	id: number;
+	url_img: string;
+	name: string;
+	descripcion: string;
+	price: number;
+	setLength: React.Dispatch<SetStateAction<boolean>>;
+	productos: number[];
 }
 
-const ProductoCard = ({ url_img, name, descripcion, price }: Produto) => {
+const ProductoCard = ({
+	id,
+	url_img,
+	name,
+	descripcion,
+	price,
+	setLength,
+	productos,
+}: Producto) => {
+	const [check, setCheck] = useState(false);
+
+	const handleProduct = () => {
+		if (check) {
+			setCheck(false);
+			productos.pop();
+		} else if (!check) {
+			setCheck(true);
+			productos.push(id);
+		}
+
+		setLength(productos.length !== 0);
+	};
+
+	const handleKeyPress = (event: React.KeyboardEvent) => {
+		if (event.key === 'Enter') {
+			handleProduct();
+		}
+	};
+
 	return (
-		<div className={styles.card__container}>
-			<img src={url_img} />
+		<div
+			onClick={() => handleProduct()}
+			onKeyDown={handleKeyPress}
+			className={
+				!check ? styles.card__container : styles.card__container__check
+			}>
+			<span className={styles.key}>ID: {id}</span>
+			<img src={url_img} alt={name} />
 			<div className={styles.data}>
 				<p>
 					<b>Producto:</b> {name}

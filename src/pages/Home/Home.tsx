@@ -1,23 +1,41 @@
 import styles from './Home.module.scss';
 import logo from '../../assets/logo.jpg';
 import user from '../../assets/user_icon.jpg';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import ProductoCard from '../../components/ProductoCard/ProductoCard';
+import ShopCard from '../../components/ShopCard/ShopCard';
 
 interface Producto {
 	ProductoID: number;
 	NombreProducto: string;
 	Descripcion: string;
 	PrecioUnitario: number;
+	url_image: string;
+}
+
+interface Cliente {
+	idCliente: number;
+	nombres: string;
+	apellidos: string;
+	email: string;
+	tlf: string;
 }
 
 const Home = () => {
 	const [id, setId] = useState(0);
 	const [name, setName] = useState('');
+	const [message, setMessage] = useState('Cargando datos...');
 	const [minValue, setMinValue] = useState(0);
 	const [maxValue, setMaxValue] = useState(500);
 	const [porId, setPorId] = useState(false);
+	const [disponible, setDisponible] = useState(true);
 	const [data, setData] = useState<Producto[]>([]);
+	const productos = useMemo(() => [], []);
+	const [l, setLength] = useState(false);
+	const [clientes, setClientes] = useState<Cliente[]>([]);
+	const [shop, setShop] = useState(false);
+
+	localStorage.setItem('idCliente', '1');
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -27,6 +45,19 @@ const Home = () => {
 			const r = await response.json();
 
 			setData(r.recordset);
+		};
+
+		fetchData();
+	}, []);
+
+	useEffect(() => {
+		const fetchData = async () => {
+			const response = await fetch('http://localhost:3000/getClients', {
+				method: 'GET',
+			});
+			const r = await response.json();
+
+			setClientes(r.recordset);
 		};
 
 		fetchData();
@@ -45,12 +76,19 @@ const Home = () => {
 				name,
 				minValue,
 				maxValue,
+				porId,
+				disponible,
 			}),
 		});
 		const r = await response.json();
 
-		setData(r.recordset);
-	}
+		if (!r.message) {
+			setMessage('Cargando datos...');
+			setData(r.recordset);
+		} else {
+			setMessage(r.message);
+		}
+	};
 
 	return (
 		<>
@@ -68,6 +106,20 @@ const Home = () => {
 				</div>
 			</header>
 			<main className={styles.main}>
+				{clientes.map((cliente) => {
+					if (cliente.idCliente == localStorage.getItem('idCliente') && shop) {
+						return (
+							<ShopCard
+								key={cliente.idCliente}
+								nCliente={`${cliente.nombres} ${cliente.apellidos}`}
+								pToPay={productos}
+								email={cliente.email}
+								allProducts={data}
+								setShop={setShop}
+							/>
+						);
+					}
+				})}
 				<p className={styles.message}>
 					¡Todo lo que puedas imaginar, aquí en Mundo GadgetStore!
 				</p>
@@ -78,7 +130,9 @@ const Home = () => {
 							type="text"
 							placeholder="Buscar..."
 							disabled={porId}
-							onChange={(e) => setName(e.target.value)}
+							onChange={(e) => {
+								setName(e.target.value);
+							}}
 						/>
 						<div className={styles.busqueda__id}>
 							<input
@@ -123,27 +177,42 @@ const Home = () => {
 							<input
 								className={styles.input__checkbox}
 								type="checkbox"
-								checked
+								defaultChecked
+								onChange={(e) => setDisponible(e.target.checked)}
 							/>
 							<span>Stock disponible</span>
 						</div>
-						<button onClick={buscar}>Buscar</button>
+						<button className={styles.btn__buscar} onClick={buscar}>
+							Buscar
+						</button>
+						{productos.length >= 1 ? (
+							<button
+								className={styles.btn__comprar}
+								onClick={() => setShop(true)}>
+								Comprar
+							</button>
+						) : (
+							''
+						)}
 					</div>
 					<div className={styles.productos__container}>
-						{data.length > 0 ? (
+						{data.length > 0 && message === 'Cargando datos...' ? (
 							data.map((p) => {
 								return (
 									<ProductoCard
 										key={p.ProductoID}
+										id={p.ProductoID}
 										name={p.NombreProducto}
 										descripcion={p.Descripcion}
 										price={p.PrecioUnitario}
-										url_img={logo}
+										url_img={p.url_image}
+										setLength={setLength}
+										productos={productos}
 									/>
 								);
 							})
 						) : (
-							<h2>Cargando datos...</h2>
+							<h2>{message}</h2>
 						)}
 					</div>
 				</div>
