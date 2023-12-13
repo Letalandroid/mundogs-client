@@ -5,6 +5,11 @@ import { useEffect, useState, useMemo, useCallback } from 'react';
 import ProductoCard from '../../components/ProductoCard/ProductoCard';
 import ShopCard from '../../components/ShopCard/ShopCard';
 
+interface PaymentDetails {
+	id: number;
+	cantidad: number;
+}
+
 interface Producto {
 	ProductoID: number;
 	NombreProducto: string;
@@ -30,7 +35,7 @@ const Home = () => {
 	const [porId, setPorId] = useState(false);
 	const [disponible, setDisponible] = useState(true);
 	const [data, setData] = useState<Producto[]>([]);
-	const productos = useMemo(() => [], []);
+	const [productos, setProductos] = useState<PaymentDetails[]>([]);
 	const [l, setLength] = useState(false);
 	const [clientes, setClientes] = useState<Cliente[]>([]);
 	const [shop, setShop] = useState(false);
@@ -38,6 +43,7 @@ const Home = () => {
 	localStorage.setItem('idCliente', '1');
 
 	useEffect(() => {
+	productos.pop();
 		const fetchData = async () => {
 			const response = await fetch('http://localhost:3000/getProducts', {
 				method: 'GET',
@@ -208,6 +214,7 @@ const Home = () => {
 										url_img={p.url_image}
 										setLength={setLength}
 										productos={productos}
+										setProductos={setProductos}
 									/>
 								);
 							})

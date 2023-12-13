@@ -1,5 +1,10 @@
 import { SetStateAction, useState } from 'react';
 import styles from './ProductoCard.module.scss';
+
+interface PaymentDetails {
+	id: number;
+	cantidad: number;
+}
 interface Producto {
 	id: number;
 	url_img: string;
@@ -7,7 +12,8 @@ interface Producto {
 	descripcion: string;
 	price: number;
 	setLength: React.Dispatch<SetStateAction<boolean>>;
-	productos: number[];
+	productos: PaymentDetails[];
+	setProductos: React.Dispatch<SetStateAction<PaymentDetails[]>>;
 }
 
 const ProductoCard = ({
@@ -18,19 +24,58 @@ const ProductoCard = ({
 	price,
 	setLength,
 	productos,
+	setProductos
 }: Producto) => {
+	const [btnShopCancel, setBtnSC] = useState(false);
 	const [check, setCheck] = useState(false);
+	const [cantidad, setCantidad] = useState(1);
 
-	const handleProduct = () => {
-		if (check) {
+	const handleProduct = (e) => {
+		if (
+			check &&
+			e.target.localName !== 'input' &&
+			e.target.localName !== 'button'
+		) {
 			setCheck(false);
-			productos.pop();
-		} else if (!check) {
+			setBtnSC(false);
+
+			const indexToRemove = productos.findIndex((value) => value.id === id);
+
+			if (indexToRemove !== -1) {
+				const newProductos = [...productos];
+				newProductos.splice(indexToRemove, 1);
+				setProductos(newProductos);
+				setBtnSC(!btnShopCancel);
+			}
+		} else if (
+			!check &&
+			e.target.localName !== 'input' &&
+			e.target.localName !== 'button'
+		) {
 			setCheck(true);
-			productos.push(id);
+			setBtnSC(true);
 		}
 
 		setLength(productos.length !== 0);
+	};
+
+	const addShop = () => {
+		const newProductos = [...productos, { id, cantidad }];
+		setProductos(newProductos);
+		setBtnSC(false);
+	};
+
+	const removeShop = () => {
+		if (!btnShopCancel) {
+			const indexToRemove = productos.findIndex((value) => value.id === id);
+
+			if (indexToRemove !== -1) {
+				const newProductos = [...productos];
+				newProductos.splice(indexToRemove, 1);
+				setProductos(newProductos);
+				setBtnSC(!btnShopCancel);
+			}
+		}
 	};
 
 	const handleKeyPress = (event: React.KeyboardEvent) => {
@@ -41,7 +86,7 @@ const ProductoCard = ({
 
 	return (
 		<div
-			onClick={() => handleProduct()}
+			onClick={(e) => handleProduct(e)}
 			onKeyDown={handleKeyPress}
 			className={
 				!check ? styles.card__container : styles.card__container__check
@@ -55,6 +100,35 @@ const ProductoCard = ({
 				<p>
 					<b>Descripcion:</b> {descripcion}
 				</p>
+				{check ? (
+					<>
+						<p className={styles.cant__input}>
+							<b>Cantidad:</b>
+							<input
+								onChange={(e) => setCantidad(parseInt(e.target.value))}
+								type="number"
+								defaultValue={1}
+								min={1}
+								max={20}
+							/>
+						</p>
+						<p>
+							{btnShopCancel ? (
+								<button className={styles.btn__add} onClick={() => addShop()}>
+									<i className="fas fa-cart-plus"></i>
+								</button>
+							) : (
+								<button
+									className={styles.btn__remove}
+									onClick={() => removeShop()}>
+									<i className="fas fa-ban"></i>
+								</button>
+							)}
+						</p>
+					</>
+				) : (
+					''
+				)}
 			</div>
 			<p className={styles.price}>S/. {price}</p>
 		</div>
