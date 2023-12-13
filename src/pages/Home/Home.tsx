@@ -1,7 +1,7 @@
 import styles from './Home.module.scss';
 import logo from '../../assets/logo.jpg';
 import user from '../../assets/user_icon.jpg';
-import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import ProductoCard from '../../components/ProductoCard/ProductoCard';
 import ShopCard from '../../components/ShopCard/ShopCard';
 
@@ -96,6 +96,8 @@ const Home = () => {
 		}
 	};
 
+	const localStorageId = parseInt(localStorage.getItem('idCliente') || '0', 10);
+
 	return (
 		<>
 			<header className={styles.header}>
@@ -113,7 +115,7 @@ const Home = () => {
 			</header>
 			<main className={styles.main}>
 				{clientes.map((cliente) => {
-					if (cliente.idCliente == localStorage.getItem('idCliente') && shop) {
+					if (cliente.idCliente === localStorageId && shop) {
 						return (
 							<ShopCard
 								key={cliente.idCliente}
